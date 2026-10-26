@@ -1,0 +1,37 @@
+name: Build GTA Los Santos Mod
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download source code
+        uses: actions/checkout@v4
+
+      - name: Install Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.6
+
+      - name: Build Minecraft mod
+        run: gradle build
+
+      - name: Save JAR file
+        uses: actions/upload-artifact@v4
+        with:
+          name: GTA-Los-Santos-Mod
+          path: build/libs/*.jar
